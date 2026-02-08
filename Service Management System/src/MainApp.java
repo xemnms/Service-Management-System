@@ -70,11 +70,12 @@ public class MainApp {
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please try again."); //HUI
                     break;
             }
 
         } while (mainMenuChoice != 0);
         inputScanner.close();
     } 
+
 }
