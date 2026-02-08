@@ -15,15 +15,63 @@ abstract class Person {
 }
 
 class Client extends Person {
+    private String companyName;
 
+    public Client(int id, String name, String email, String companyName) {
+        super(id, name, email);
+        this.companyName = companyName;
+}
+    public void displayInfo() {
+        System.out.println("Client ID: " + id);
+        System.out.println(" | Name: " + name);
+        System.out.println(" | Email: " + email);
+        System.out.println(" | Company: " + companyName);
+    }
 }
 
 class Employee extends Person {
+    private String position;
+    private double hourlyRate;
 
+    public Employee(int id, String name, String email, String position, double hourlyRate) {
+        super(id, name, email);
+        this.position = position;
+        this.hourlyRate = hourlyRate;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void displayInfo() {
+        System.out.println("Employee ID: " + id);
+        System.out.println(" | Name: " + name);
+        System.out.println(" | Email: " + email);
+        System.out.println(" | Position: " + position);
+        System.out.println(" | Rate: ₱" + hourlyRate + "/hr");
+    }
 }
 
 class Service {
+    private int serviceId;
+    private String serviceName;
+    private double price;
 
+    public Service(int serviceId, String serviceName, double price) {
+        this.serviceId = serviceId;
+        this.serviceName = serviceName;
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void displayInfo() {
+        System.out.println("Service ID: " + serviceId);
+        System.out.println(" | Service: " + serviceName);
+        System.out.println(" | Price: ₱" + price);
+    }
 }
 
 class ServiceRequest { // Everything is subject to change, this is just a placeholder for the service request class, including variable names and types
@@ -97,15 +145,156 @@ public class MainApp {
 
             switch (mainMenuChoice) {
                 case 1:
-                    //Clisha
+                    int clientChoice;
+                    do {
+                        System.out.println("\n--- Manage Clients ---");
+                        System.out.println("1. Add Client");
+                        System.out.println("2. View Clients");
+                        System.out.println("0. Back");
+                        System.out.print("Enter choice: ");
+                        clientChoice = inputScanner.nextInt();
+                        inputScanner.nextLine();
+
+                        switch (clientChoice) {
+                            case 1:
+                                System.out.print("Client ID: ");
+                                int clientId = inputScanner.nextInt();
+                                inputScanner.nextLine();
+
+                                System.out.print("Name: ");
+                                String clientName = inputScanner.nextLine();
+
+                                System.out.print("Email: ");
+                                String clientEmail = inputScanner.nextLine();
+
+                                System.out.print("Company Name: ");
+                                String clientCompany = inputScanner.nextLine();
+
+                                clients.add(new Client(clientId, clientName, clientEmail, clientCompany));
+                                System.out.println("Client added successfully!");
+                                break;
+
+                            case 2:
+                                if (clients.isEmpty()) {
+                                    System.out.println("No clients found.");
+                                } else {
+                                    for (Client client : clients) {
+                                        client.displayInfo();
+                                    }
+                                }
+                                break;
+
+                            case 0:
+                                System.out.println("Returning to main menu...");
+                                break;
+
+                            default:
+                                System.out.println("Invalid choice.");
+                        }
+
+                    } while (clientChoice != 0);
                     break;
 
                 case 2:
-                    //Clisha
+                    int employeeChoice;
+                    do {
+                        System.out.println("\n--- Manage Employees ---");
+                        System.out.println("1. Add Employee");
+                        System.out.println("2. View Employees");
+                        System.out.println("0. Back");
+                        System.out.print("Enter choice: ");
+                        employeeChoice = inputScanner.nextInt();
+                        inputScanner.nextLine();
+
+                        switch (employeeChoice) {
+                            case 1:
+                                System.out.print("Employee ID: ");
+                                int empId = inputScanner.nextInt();
+                                inputScanner.nextLine();
+
+                                System.out.print("Name: ");
+                                String empName = inputScanner.nextLine();
+
+                                System.out.print("Email: ");
+                                String empEmail = inputScanner.nextLine();
+
+                                System.out.print("Position: ");
+                                String empPosition = inputScanner.nextLine();
+
+                                System.out.print("Hourly Rate: ");
+                                double empRate = inputScanner.nextDouble();
+                                
+                                employees.add(new Employee(empId, empName, empEmail, empPosition, empRate));
+                                System.out.println("Employee added successfully!");
+                                break;
+
+                            case 2:
+                                if (employees.isEmpty()) {
+                                    System.out.println("No employees found.");
+                                } else {
+                                    for (Employee employee : employees) {
+                                        employee.displayInfo();
+                                    }
+                                }
+                                break;
+
+                            case 0:
+                                System.out.println("Returning to main menu...");
+                                break;
+
+                            default:
+                                System.out.println("Invalid choice.");
+                        }
+
+                    } while (employeeChoice != 0);
                     break;
 
                 case 3:
-                    //Clisha
+                    int serviceChoice;
+                	    do {
+                	        System.out.println("\n--- Manage Services ---");
+                	        System.out.println("1. Add Service");
+                	        System.out.println("2. View Services");
+                	        System.out.println("0. Back");
+                	        System.out.print("Enter choice: ");
+                	        serviceChoice = inputScanner.nextInt();
+                	        inputScanner.nextLine();
+
+                	        switch (serviceChoice) {
+                	            case 1:
+                	                System.out.print("Service ID: ");
+                	                int serId = inputScanner.nextInt();
+                	                inputScanner.nextLine();
+
+                	                System.out.print("Service Name: ");
+                	                String serName = inputScanner.nextLine();
+
+                	                System.out.print("Service Price: ");
+                	                double serPrice = inputScanner.nextDouble();
+
+                	                services.add(new Service(serId, serName, serPrice));
+                	                System.out.println("Service added successfully!");
+                	                break;
+
+                	            case 2:
+                	                if (services.isEmpty()) {
+                	                    System.out.println("No services found.");
+                	                } else {
+                	                    for (Service service : services) {
+                	                        service.displayInfo();
+                	                    }
+                	                }
+                	                break;
+
+                	            case 0:
+                	                System.out.println("Returning to main menu...");
+                	                break;
+
+                	            default:
+                	                System.out.println("Invalid choice.");
+                	        }
+
+                	    } while (serviceChoice != 0);
                     break;
 
                 case 4:
@@ -221,6 +410,7 @@ public class MainApp {
     } 
 
 }
+
 
 
 
