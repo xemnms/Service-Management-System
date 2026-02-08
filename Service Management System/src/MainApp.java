@@ -66,7 +66,7 @@ public class MainApp {
                     break;
 
                 case 0:
-                    System.out.println("Exiting... Goodbye!");
+                    System.out.println("Exiting... Goodbye!"); //Sample
                     break;
 
                 default:
@@ -79,3 +79,4 @@ public class MainApp {
     } 
 
 }
+
