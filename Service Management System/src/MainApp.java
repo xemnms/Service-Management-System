@@ -44,6 +44,36 @@ public class MainApp {
             mainMenuChoice = inputScanner.nextInt();
             inputScanner.nextLine(); // Consume newline
 
+            switch (mainMenuChoice) {
+                case 1:
+                    //Clisha
+                    break;
+
+                case 2:
+                    //Clisha
+                    break;
+
+                case 3:
+                    //Clisha
+                    break;
+
+                case 4:
+                    //Axel
+                    break;
+
+                case 5:
+                    //Axel
+                    break;
+
+                case 0:
+                    System.out.println("Exiting... Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+
         } while (mainMenuChoice != 0);
         inputScanner.close();
     } 
