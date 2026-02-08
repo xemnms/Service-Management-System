@@ -1,0 +1,88 @@
+JAVA FINAL PROJECT: IT Service Management System
+Due February 12, 2026 9:00 PM
+Instructions
+
+Project Overview 
+Students will develop a menu-driven Java console application that simulates a small IT Services company system.
+The system will manage clients, services, employees, tasks, and reports using Object-Oriented Programming principles. 
+
+This project mirrors real-world IT operations, not just coding syntax. 
+
+
+Project Scenario 
+You are a Java Developer hired to create a basic IT Service Management System for a small company. 
+
+The system must help the company: 
+    - Manage clients 
+    - Track IT services 
+    - Assign employees 
+    - Process service requests  
+    - Generate simple reports 
+
+System Requirements
+    1. Main Menu (Required) 
+        Use a loop-based menu: 
+    
+    2. Classes to Create (MANDATORY) 
+        Core Classes 
+        
+        Person (Abstract Class) 
+            - Attributes: id, name, email 
+            - Abstract method: displayInfo() 
+
+        Client (inherits Person) 
+            - Attribute: companyName 
+            - Method override: displayInfo() 
+
+        Employee (inherits Person) 
+            - Attributes: position, hourlyRate 
+            - Method override: displayInfo() 
+
+        Service 
+            - Attributes: serviceId, serviceName, price 
+            - Constructor 
+            - Getter and setter methods 
+
+        ServiceRequest 
+            - Attributes: requestId, Client, Employee, Service, hoursWorked 
+            - Method: calculateTotalCost() 
+            - Method overloading: 
+                a. calculateTotalCost() 
+                b. calculateTotalCost(double discount) 
+
+        MainApp 
+            - Contains main() method 
+            - Menu logic 
+            - Calls all system methods 
+
+    3. Required Functionalities 
+        ✔ Manage Clients 
+            - Add client 
+            - View all clients 
+
+        ✔ Manage Employees 
+            - Add employee 
+            - View employees 
+
+        ✔ Manage Services 
+            - Add service 
+            - View services 
+
+        ✔ Service Transactions 
+            - Create service request 
+            - Assign employee to client 
+            - Compute total cost 
+
+        ✔ Reports 
+            - Total number of clients 
+            - Total number of services rendered 
+            - Total revenue generated 
+
+Deliverables  
+    1. Complete Java source code 
+    2. UML Class Diagram 
+    3. Short Documentation 
+        - System description 
+        - Features 
+        - Sample output screenshots 
+    4. Recorded demo (3–5 minutes) 
