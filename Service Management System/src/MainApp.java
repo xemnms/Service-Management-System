@@ -1,7 +1,17 @@
 import java.util.*;
 
 abstract class Person {
-// HI CLISHA RAE HELLO
+    protected int id;
+    protected String name;
+    protected String email;
+
+    public Person(int id, String name, String email){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public abstract void displayInfo();
 }
 
 class Client extends Person {
@@ -79,6 +89,7 @@ public class MainApp {
     } 
 
 }
+
 
 
 
