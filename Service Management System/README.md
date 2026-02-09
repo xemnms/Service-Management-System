@@ -275,5 +275,3 @@ This project is created for educational purposes.
 This is an educational project. Feel free to fork and modify for your learning purposes.
 
 ---
-
-**Note**: This is a console-based application. All interactions are performed through text-based menus and prompts.
