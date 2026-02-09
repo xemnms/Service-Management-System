@@ -1,13 +1,11 @@
-// ===========================================================================================
 // IMPORTS SECTION
-// ===========================================================================================
+
 // Import statements for file handling and collections (File handling, ArrayList)
 import java.io.*;
 import java.util.*;
 
-// ===========================================================================================
 // PERSON CLASS - ABSTRACT BASE CLASS
-// ===========================================================================================
+
 // Abstract parent class for all person types (Abstraction, Inheritance, Class)
 abstract class Person {
     // Instance variables with protected access modifier (Variable - instance, Access modifiers, Data types)
@@ -27,9 +25,8 @@ abstract class Person {
     public abstract void displayInfo();
 }
 
-// ===========================================================================================
-// CLIENT CLASS - REPRESENTS A CLIENT/CUSTOMER
-// ===========================================================================================
+// CLIENT CLASS - REPRESENTS A CLIENT
+
 // Client class extending Person (Inheritance, Class, Encapsulation)
 class Client extends Person {
     // Private instance variable (Access modifiers, Variable - instance, Data types - non primitive)
@@ -57,9 +54,8 @@ class Client extends Person {
     }
 }
 
-// ===========================================================================================
-// EMPLOYEE CLASS - REPRESENTS AN EMPLOYEE/SERVICE PROVIDER
-// ===========================================================================================
+// EMPLOYEE CLASS - REPRESENTS AN EMPLOYEE
+
 // Employee class extending Person (Inheritance, Class)
 class Employee extends Person {
     // Private instance variables (Access modifiers, Variable - instance, Data types)
@@ -93,9 +89,8 @@ class Employee extends Person {
     }
 }
 
-// ===========================================================================================
 // SERVICE CLASS - REPRESENTS A SERVICE OFFERING
-// ===========================================================================================
+
 // Service class for managing service information (Class, Encapsulation)
 class Service {
     // Private instance variables (Access modifiers, Variable - instance, Data types)
@@ -132,9 +127,8 @@ class Service {
     }
 }
 
-// ===========================================================================================
-// SERVICE REQUEST CLASS - REPRESENTS A TRANSACTION/BOOKING
-// ===========================================================================================
+// SERVICE REQUEST CLASS - REPRESENTS A TRANSACTION
+
 // ServiceRequest class to manage service transactions (Class, Encapsulation)
 class ServiceRequest { 
     // Private instance variables (Access modifiers, Variable - instance, Data types)
@@ -188,9 +182,8 @@ class ServiceRequest {
 
 }
 
-// ===========================================================================================
 // MAIN APPLICATION CLASS - ENTRY POINT AND MENU SYSTEM
-// ===========================================================================================
+
 // Main application class (Class, Access modifiers - public)
 public class MainApp {
 
@@ -200,26 +193,23 @@ public class MainApp {
     static ArrayList<Service> services = new ArrayList<>();
     static ArrayList<ServiceRequest> serviceRequests = new ArrayList<>();
 
-    // ===========================================================================================
     // MAIN METHOD - PROGRAM ENTRY POINT
-    // ===========================================================================================
+
     // Main method - entry point of the program (Methods - static)
     public static void main(String[] args) {
         // Local variable for user input (Variable - local, Scanner, Data types - non primitive)
         Scanner inputScanner = new Scanner(System.in);
 
-        // ===========================================================================================
         // LOAD EXISTING DATA FROM FILES
-        // ===========================================================================================
+
         // Load data from files on startup (Methods - static)
         loadClientsFromFile();
         loadEmployeesFromFile();
         loadServicesFromFile();
         loadServiceRequestsFromFile();
 
-        // ===========================================================================================
         // MAIN MENU LOOP
-        // ===========================================================================================
+
         // Local variable for menu choice (Variable - local, Data types - primitive)
         int mainMenuChoice;
         // Main menu loop (Loops - do-while)
@@ -240,9 +230,7 @@ public class MainApp {
 
             // Switch statement for menu navigation (Control statement - switch)
             switch (mainMenuChoice) {
-                // ===========================================================================================
                 // CASE 1: CLIENT MANAGEMENT
-                // ===========================================================================================
                 case 1:
                     // Client management submenu (Variable - local)
                     int clientMenuChoice;
@@ -306,9 +294,7 @@ public class MainApp {
                     } while (clientMenuChoice != 0);
                     break;
 
-                // ===========================================================================================
                 // CASE 2: EMPLOYEE MANAGEMENT
-                // ===========================================================================================
                 case 2:
                     // Employee management submenu
                     int employeeMenuChoice;
@@ -369,9 +355,7 @@ public class MainApp {
                     } while (employeeMenuChoice != 0);
                     break;
 
-                // ===========================================================================================
                 // CASE 3: SERVICE MANAGEMENT
-                // ===========================================================================================
                 case 3:
                     int serviceMenuChoice;
                 	    do {
@@ -424,9 +408,7 @@ public class MainApp {
                 	    } while (serviceMenuChoice != 0);
                     break;
 
-                // ===========================================================================================
                 // CASE 4: SERVICE TRANSACTIONS
-                // ===========================================================================================
                 case 4:
                     // Service transaction management
                     int transactionMenuChoice;
@@ -443,9 +425,7 @@ public class MainApp {
 
                         switch (transactionMenuChoice) {
                             case 1:
-                                // -----------------------------------------------------------------------
                                 // CREATE SERVICE REQUEST
-                                // -----------------------------------------------------------------------
                                 // Validate that all required data exists before creating request
                                 // Nested ternary operators for validation (Operators - ternary, Control statement - nested if)
                                 String missingData = clients.isEmpty() ? "clients" : 
@@ -595,9 +575,7 @@ public class MainApp {
                                 break;
 
                             case 3:
-                                // -----------------------------------------------------------------------
                                 // COMPUTE TOTAL COST
-                                // -----------------------------------------------------------------------
                                 // Validate using isEmpty method (ArrayList methods - isEmpty, Control statement - if)
                                 if (serviceRequests.isEmpty()) {
                                     System.out.println("\n[ERROR] No service requests found!");
@@ -687,9 +665,7 @@ public class MainApp {
                     } while (transactionMenuChoice != 0);
                     break;
 
-                // ===========================================================================================
                 // CASE 5: REPORTS
-                // ===========================================================================================
                 case 5:
                     // Reports menu
                     int reportMenuChoice;
@@ -744,10 +720,8 @@ public class MainApp {
                         }
                     } while (reportMenuChoice != 0);
                     break;
-
-                // ===========================================================================================
+                
                 // CASE 0: EXIT PROGRAM
-                // ===========================================================================================
                 case 0:
                     // Save all data before exit
                     saveClientsToFile();
@@ -768,9 +742,7 @@ public class MainApp {
         inputScanner.close();
     }
     
-    // ===========================================================================================
     // FILE SAVING METHODS
-    // ===========================================================================================
     
     // Save clients data to file (Methods - static, File handling)
     static void saveClientsToFile() {
@@ -838,9 +810,7 @@ public class MainApp {
         }
     }
 
-    // ===========================================================================================
     // FILE LOADING METHODS
-    // ===========================================================================================
     
     // Load clients data from file (Methods - static, File handling)
     static void loadClientsFromFile() {
