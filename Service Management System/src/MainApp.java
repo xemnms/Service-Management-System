@@ -85,7 +85,7 @@ class Employee extends Person {
         System.out.println(" | Name: " + name);
         System.out.println(" | Email: " + email);
         System.out.println(" | Position: " + position);
-        System.out.println(" | Rate: PHP " + hourlyRate + "/hr");
+        System.out.println(" | Rate: $ " + hourlyRate + "/hr");
     }
 }
 
@@ -123,7 +123,7 @@ class Service {
         // Display all service information (Operators - concatenation)
         System.out.println("Service ID: " + serviceId);
         System.out.println(" | Service: " + serviceName);
-        System.out.println(" | Price: PHP " + price);
+        System.out.println(" | Price: $ " + price);
     }
 }
 
@@ -680,7 +680,7 @@ public class MainApp {
                                 do {
                                     for (int i = 0; i < services.size(); i++) {
                                         Service service = services.get(i);
-                                        System.out.printf("%d. %s (ID: %d, Base Price: PHP %.2f)%n", 
+                                        System.out.printf("%d. %s (ID: %d, Base Price: $ %.2f)%n", 
                                             i + 1, service.getServiceName(), service.getServiceId(), service.getPrice());
                                     }
                                     System.out.print("Select Service (1-" + services.size() + " or 0 to cancel): ");
@@ -787,7 +787,7 @@ public class MainApp {
                                 do {
                                     for (int i = 0; i < employees.size(); i++) {
                                         Employee employee = employees.get(i);
-                                        System.out.printf("%d. %s (ID: %d, Position: %s, Rate: PHP %.2f/hr)%n", 
+                                        System.out.printf("%d. %s (ID: %d, Position: %s, Rate: $ %.2f/hr)%n", 
                                             i + 1, employee.name, employee.id, employee.getPosition(), employee.getHourlyRate());
                                     }
                                     System.out.print("Select Employee (1-" + employees.size() + " or 0 to cancel): ");
@@ -836,7 +836,7 @@ public class MainApp {
                                     for (int i = 0; i < serviceRequests.size(); i++) {
                                         ServiceRequest request = serviceRequests.get(i);
                                         String priceStatus = (request.getComputedPrice() == null) ? "Not computed" : 
-                                                            String.format("PHP %.2f", request.getComputedPrice());
+                                                            String.format("$ %.2f", request.getComputedPrice());
                                         String empStatus = (request.getEmployee() == null) ? "No employee" : 
                                                           request.getEmployee().name;
                                         System.out.printf("%d. Request #%d - %s | Employee: %s | Price: %s%n", 
@@ -902,7 +902,7 @@ public class MainApp {
                                     selected.setComputedPrice(originalPrice); // Save the price
                                     
                                     System.out.println("\n========== Cost Summary ==========");
-                                    System.out.printf("Total Cost (No Discount): PHP %.2f%n", originalPrice);
+                                    System.out.printf("Total Cost (No Discount): $ %.2f%n", originalPrice);
                                     System.out.println("==================================");
                                     System.out.println("[SUCCESS] Price saved to service request!");
                                     
@@ -939,10 +939,10 @@ public class MainApp {
                                     selected.setComputedPrice(finalCost); // Save the discounted price
                                     
                                     System.out.println("\n========== Cost Summary ==========");
-                                    System.out.printf("Original Cost:  PHP %.2f%n", originalCost);
-                                    System.out.printf("Discount:       %.0f%% (PHP %.2f)%n", 
+                                    System.out.printf("Original Cost:  $ %.2f%n", originalCost);
+                                    System.out.printf("Discount:       %.0f%% ($ %.2f)%n", 
                                         discountPercent, discountAmount);
-                                    System.out.printf("Final Cost:     PHP %.2f%n", finalCost);
+                                    System.out.printf("Final Cost:     $ %.2f%n", finalCost);
                                     System.out.println("==================================");
                                     System.out.println("[SUCCESS] Discounted price saved to service request!");
                                 }
@@ -1000,7 +1000,7 @@ public class MainApp {
                                     totalRevenue += serviceRequest.calculateTotalCost();
                                 }
                                 System.out.println("\n========== Revenue Report =========");
-                                System.out.printf("Total Revenue: PHP %.2f%n", totalRevenue);
+                                System.out.printf("Total Revenue: $ %.2f%n", totalRevenue);
                                 System.out.println("===================================");
                                 break;
 
