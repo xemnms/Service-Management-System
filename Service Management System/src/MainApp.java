@@ -85,7 +85,7 @@ class Employee extends Person {
         System.out.println(" | Name: " + name);
         System.out.println(" | Email: " + email);
         System.out.println(" | Position: " + position);
-        System.out.println(" | Rate: ₱" + hourlyRate + "/hr");
+        System.out.println(" | Rate: PHP " + hourlyRate + "/hr");
     }
 }
 
@@ -123,7 +123,7 @@ class Service {
         // Display all service information (Operators - concatenation)
         System.out.println("Service ID: " + serviceId);
         System.out.println(" | Service: " + serviceName);
-        System.out.println(" | Price: ₱" + price);
+        System.out.println(" | Price: PHP " + price);
     }
 }
 
@@ -136,7 +136,8 @@ class ServiceRequest {
     private Client client; 
     private Service service; 
     private Employee employee; 
-    private double hoursWorked; 
+    private double hoursWorked;
+    private Double computedPrice; // Stores the final computed price (null if not computed yet)
 
     // Constructor (Methods)
     public ServiceRequest(int requestId, Client client, Service service, Employee employee, double hoursWorked) {
@@ -145,6 +146,7 @@ class ServiceRequest {
         this.service = service;
         this.employee = employee;
         this.hoursWorked = hoursWorked;
+        this.computedPrice = null;
     }
 
     // Getter methods for all properties (Methods - instance, Encapsulation)
@@ -168,8 +170,26 @@ class ServiceRequest {
         return hoursWorked;
     }
 
+    public Double getComputedPrice() {
+        return computedPrice;
+    }
+
+    public void setComputedPrice(double price) {
+        this.computedPrice = price;
+    }
+
+    // Setter method for employee (Methods - instance, Encapsulation)
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
     // Calculate total cost without discount (Methods - instance, Operators - arithmetic)
     public double calculateTotalCost() {
+        // Check if employee is assigned (Control statement - if)
+        if (employee == null) {
+            System.out.println("[WARNING] Employee not assigned yet!");
+            return service.getPrice() * hoursWorked;
+        }
         // Formula: (service price + employee rate) * hours worked (Operators - arithmetic)
         return (service.getPrice() + employee.getHourlyRate()) * hoursWorked;
     }
@@ -250,18 +270,78 @@ public class MainApp {
                             case 1:
                                 // --- ADD NEW CLIENT ---
                                 // Collect client information from user (Variable - local)
-                                System.out.print("Client ID: ");
-                                int clientId = inputScanner.nextInt();
-                                inputScanner.nextLine();
+                                int clientId;
+                                // Loop until valid client ID (Loops - do-while)
+                                do {
+                                    System.out.print("Client ID (positive number or 0 to cancel): ");
+                                    clientId = inputScanner.nextInt();
+                                    inputScanner.nextLine();
+                                    
+                                    if (clientId == 0) {
+                                        System.out.println("[CANCELLED] Client creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (clientId < 0) {
+                                        System.out.println("[ERROR] ID must be a positive number! Please try again.");
+                                    }
+                                } while (clientId < 0);
+                                
+                                if (clientId == 0) break;
 
-                                System.out.print("Name: ");
-                                String clientName = inputScanner.nextLine();
+                                String clientName;
+                                // Loop until valid name (non-empty)
+                                do {
+                                    System.out.print("Name (or type 'cancel' to cancel): ");
+                                    clientName = inputScanner.nextLine().trim();
+                                    
+                                    if (clientName.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Client creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (clientName.isEmpty()) {
+                                        System.out.println("[ERROR] Name cannot be empty! Please try again.");
+                                    }
+                                } while (clientName.isEmpty());
+                                
+                                if (clientName.equalsIgnoreCase("cancel")) break;
 
-                                System.out.print("Email: ");
-                                String clientEmail = inputScanner.nextLine();
+                                String clientEmail;
+                                // Loop until valid email (non-empty)
+                                do {
+                                    System.out.print("Email (or type 'cancel' to cancel): ");
+                                    clientEmail = inputScanner.nextLine().trim();
+                                    
+                                    if (clientEmail.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Client creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (clientEmail.isEmpty()) {
+                                        System.out.println("[ERROR] Email cannot be empty! Please try again.");
+                                    }
+                                } while (clientEmail.isEmpty());
+                                
+                                if (clientEmail.equalsIgnoreCase("cancel")) break;
 
-                                System.out.print("Company Name: ");
-                                String clientCompany = inputScanner.nextLine();
+                                String clientCompany;
+                                // Loop until valid company name (non-empty)
+                                do {
+                                    System.out.print("Company Name (or type 'cancel' to cancel): ");
+                                    clientCompany = inputScanner.nextLine().trim();
+                                    
+                                    if (clientCompany.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Client creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (clientCompany.isEmpty()) {
+                                        System.out.println("[ERROR] Company name cannot be empty! Please try again.");
+                                    }
+                                } while (clientCompany.isEmpty());
+                                
+                                if (clientCompany.equalsIgnoreCase("cancel")) break;
 
                                 // Creating and adding client object to ArrayList (Object, ArrayList methods - add)
                                 clients.add(new Client(clientId, clientName, clientEmail, clientCompany));
@@ -284,7 +364,7 @@ public class MainApp {
                                 break;
 
                             case 0:
-                                System.out.println("Returning to main menu...");
+                                System.out.println("Returning to main menu...\n");
                                 break;
 
                             default:
@@ -312,21 +392,97 @@ public class MainApp {
                             case 1:
                                 // --- ADD NEW EMPLOYEE ---
                                 // Collect employee information from user
-                                System.out.print("Employee ID: ");
-                                int empId = inputScanner.nextInt();
-                                inputScanner.nextLine();
+                                int empId;
+                                // Loop until valid employee ID (Loops - do-while)
+                                do {
+                                    System.out.print("Employee ID (positive number or 0 to cancel): ");
+                                    empId = inputScanner.nextInt();
+                                    inputScanner.nextLine();
+                                    
+                                    if (empId == 0) {
+                                        System.out.println("[CANCELLED] Employee creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (empId < 0) {
+                                        System.out.println("[ERROR] ID must be a positive number! Please try again.");
+                                    }
+                                } while (empId < 0);
+                                
+                                if (empId == 0) break;
 
-                                System.out.print("Name: ");
-                                String empName = inputScanner.nextLine();
+                                String empName;
+                                // Loop until valid name (non-empty)
+                                do {
+                                    System.out.print("Name (or type 'cancel' to cancel): ");
+                                    empName = inputScanner.nextLine().trim();
+                                    
+                                    if (empName.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Employee creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (empName.isEmpty()) {
+                                        System.out.println("[ERROR] Name cannot be empty! Please try again.");
+                                    }
+                                } while (empName.isEmpty());
+                                
+                                if (empName.equalsIgnoreCase("cancel")) break;
 
-                                System.out.print("Email: ");
-                                String empEmail = inputScanner.nextLine();
+                                String empEmail;
+                                // Loop until valid email (non-empty)
+                                do {
+                                    System.out.print("Email (or type 'cancel' to cancel): ");
+                                    empEmail = inputScanner.nextLine().trim();
+                                    
+                                    if (empEmail.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Employee creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (empEmail.isEmpty()) {
+                                        System.out.println("[ERROR] Email cannot be empty! Please try again.");
+                                    }
+                                } while (empEmail.isEmpty());
+                                
+                                if (empEmail.equalsIgnoreCase("cancel")) break;
 
-                                System.out.print("Position: ");
-                                String empPosition = inputScanner.nextLine();
+                                String empPosition;
+                                // Loop until valid position (non-empty)
+                                do {
+                                    System.out.print("Position (or type 'cancel' to cancel): ");
+                                    empPosition = inputScanner.nextLine().trim();
+                                    
+                                    if (empPosition.equalsIgnoreCase("cancel")) {
+                                        System.out.println("[CANCELLED] Employee creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (empPosition.isEmpty()) {
+                                        System.out.println("[ERROR] Position cannot be empty! Please try again.");
+                                    }
+                                } while (empPosition.isEmpty());
+                                
+                                if (empPosition.equalsIgnoreCase("cancel")) break;
 
-                                System.out.print("Hourly Rate: ");
-                                double empRate = inputScanner.nextDouble();
+                                double empRate;
+                                // Loop until valid hourly rate (positive number)
+                                do {
+                                    System.out.print("Hourly Rate (positive number or 0 to cancel): ");
+                                    empRate = inputScanner.nextDouble();
+                                    inputScanner.nextLine();
+                                    
+                                    if (empRate == 0) {
+                                        System.out.println("[CANCELLED] Employee creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (empRate < 0) {
+                                        System.out.println("[ERROR] Hourly rate must be positive! Please try again.");
+                                    }
+                                } while (empRate < 0);
+                                
+                                if (empRate == 0) break;
                                 
                                 // Add employee object to ArrayList (ArrayList methods - add)
                                 employees.add(new Employee(empId, empName, empEmail, empPosition, empRate));
@@ -345,7 +501,7 @@ public class MainApp {
                                 break;
 
                             case 0:
-                                System.out.println("Returning to main menu...");
+                                System.out.println("Returning to main menu...\n");
                                 break;
 
                             default:
@@ -372,15 +528,61 @@ public class MainApp {
                 	            case 1:
                 	                // --- ADD NEW SERVICE ---
                 	                // Collect service information from user
-                	                System.out.print("Service ID: ");
-                	                int serId = inputScanner.nextInt();
-                	                inputScanner.nextLine();
+                	                int serId;
+                	                // Loop until valid service ID (Loops - do-while)
+                	                do {
+                	                    System.out.print("Service ID (positive number or 0 to cancel): ");
+                	                    serId = inputScanner.nextInt();
+                	                    inputScanner.nextLine();
+                	                    
+                	                    if (serId == 0) {
+                	                        System.out.println("[CANCELLED] Service creation cancelled.");
+                	                        break;
+                	                    }
+                	                    
+                	                    if (serId < 0) {
+                	                        System.out.println("[ERROR] ID must be a positive number! Please try again.");
+                	                    }
+                	                } while (serId < 0);
+                	                
+                	                if (serId == 0) break;
 
-                	                System.out.print("Service Name: ");
-                	                String serName = inputScanner.nextLine();
+                	                String serName;
+                	                // Loop until valid service name (non-empty)
+                	                do {
+                	                    System.out.print("Service Name (or type 'cancel' to cancel): ");
+                	                    serName = inputScanner.nextLine().trim();
+                	                    
+                	                    if (serName.equalsIgnoreCase("cancel")) {
+                	                        System.out.println("[CANCELLED] Service creation cancelled.");
+                	                        break;
+                	                    }
+                	                    
+                	                    if (serName.isEmpty()) {
+                	                        System.out.println("[ERROR] Service name cannot be empty! Please try again.");
+                	                    }
+                	                } while (serName.isEmpty());
+                	                
+                	                if (serName.equalsIgnoreCase("cancel")) break;
 
-                	                System.out.print("Service Price: ");
-                	                double serPrice = inputScanner.nextDouble();
+                	                double serPrice;
+                	                // Loop until valid service price (positive number)
+                	                do {
+                	                    System.out.print("Service Price (positive number or 0 to cancel): ");
+                	                    serPrice = inputScanner.nextDouble();
+                	                    inputScanner.nextLine();
+                	                    
+                	                    if (serPrice == 0) {
+                	                        System.out.println("[CANCELLED] Service creation cancelled.");
+                	                        break;
+                	                    }
+                	                    
+                	                    if (serPrice < 0) {
+                	                        System.out.println("[ERROR] Service price must be positive! Please try again.");
+                	                    }
+                	                } while (serPrice < 0);
+                	                
+                	                if (serPrice == 0) break;
 
                 	                services.add(new Service(serId, serName, serPrice));
                 	                System.out.println("\n[SUCCESS] Service added successfully!");
@@ -398,7 +600,7 @@ public class MainApp {
                 	                break;
 
                 	            case 0:
-                	                System.out.println("Returning to main menu...");
+                	                System.out.println("Returning to main menu...\n");
                 	                break;
 
                 	            default:
@@ -427,10 +629,9 @@ public class MainApp {
                             case 1:
                                 // CREATE SERVICE REQUEST
                                 // Validate that all required data exists before creating request
-                                // Nested ternary operators for validation (Operators - ternary, Control statement - nested if)
+                                // Ternary operators for validation (Operators - ternary, Control statement - if)
                                 String missingData = clients.isEmpty() ? "clients" : 
-                                                    (employees.isEmpty() ? "employees" : 
-                                                    (services.isEmpty() ? "services" : ""));
+                                                    (services.isEmpty() ? "services" : "");
                                 // If-else statement with continue (Control statement - if-else, Loop control - continue)
                                 if (!missingData.isEmpty()) {
                                     System.out.println("\n[ERROR] Cannot create service request!");
@@ -439,75 +640,94 @@ public class MainApp {
                                 }
 
                                 // --- STEP 1: SELECT CLIENT ---
-                                System.out.println("\n--- Step 1/4: Select Client ---");
-                                // Traditional for loop (Loops - for, ArrayList methods - size, get)
-                                for (int i = 0; i < clients.size(); i++) {
-                                    // Get element from ArrayList (ArrayList methods - get)
-                                    Client client = clients.get(i);
-                                    System.out.printf("%d. %s (ID: %d, Company: %s)%n", 
-                                        i + 1, client.name, client.id, client.getCompanyName());
-                                }
-                                System.out.print("Select Client (1-" + clients.size() + "): ");
-                                // Arithmetic operation and assignment (Operators - arithmetic, assignment)
-                                int clientChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                System.out.println("\n--- Step 1/3: Select Client ---");
+                                int clientChoice;
+                                // Loop until valid client selection (Loops - do-while, Control statement)
+                                do {
+                                    // Traditional for loop (Loops - for, ArrayList methods - size, get)
+                                    for (int i = 0; i < clients.size(); i++) {
+                                        // Get element from ArrayList (ArrayList methods - get)
+                                        Client client = clients.get(i);
+                                        System.out.printf("%d. %s (ID: %d, Company: %s)%n", 
+                                            i + 1, client.name, client.id, client.getCompanyName());
+                                    }
+                                    System.out.print("Select Client (1-" + clients.size() + " or 0 to cancel): ");
+                                    // Arithmetic operation and assignment (Operators - arithmetic, assignment)
+                                    clientChoice = inputScanner.nextInt() - 1;
+                                    inputScanner.nextLine();
+                                    
+                                    // Check if user wants to cancel (Control statement - if)
+                                    if (clientChoice == -1) {
+                                        System.out.println("[CANCELLED] Service request creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    // Ternary with relational and logical operators (Operators - ternary, relational, logical)
+                                    String clientError = (clientChoice < 0 || clientChoice >= clients.size()) ? 
+                                        "[ERROR] Invalid client selection! Please try again." : "";
+                                    if (!clientError.isEmpty()) {
+                                        System.out.println(clientError);
+                                    }
+                                } while (clientChoice < 0 || clientChoice >= clients.size());
                                 
-                                // Ternary with relational and logical operators (Operators - ternary, relational, logical)
-                                String clientError = (clientChoice < 0 || clientChoice >= clients.size()) ? 
-                                    "[ERROR] Invalid client selection!" : "";
-                                if (!clientError.isEmpty()) {
-                                    System.out.println(clientError);
-                                    continue;
-                                }
+                                // If cancelled, skip to next iteration
+                                if (clientChoice == -1) continue;
 
                                 // --- STEP 2: SELECT SERVICE ---
-                                System.out.println("\n--- Step 2/4: Select Service ---");
-                                for (int i = 0; i < services.size(); i++) {
-                                    Service service = services.get(i);
-                                    System.out.printf("%d. %s (ID: %d, Base Price: ₱ %.2f)%n", 
-                                        i + 1, service.getServiceName(), service.getServiceId(), service.getPrice());
-                                }
-                                System.out.print("Select Service (1-" + services.size() + "): ");
-                                int serviceChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                System.out.println("\n--- Step 2/3: Select Service ---");
+                                int serviceChoice;
+                                // Loop until valid service selection (Loops - do-while)
+                                do {
+                                    for (int i = 0; i < services.size(); i++) {
+                                        Service service = services.get(i);
+                                        System.out.printf("%d. %s (ID: %d, Base Price: PHP %.2f)%n", 
+                                            i + 1, service.getServiceName(), service.getServiceId(), service.getPrice());
+                                    }
+                                    System.out.print("Select Service (1-" + services.size() + " or 0 to cancel): ");
+                                    serviceChoice = inputScanner.nextInt() - 1;
+                                    inputScanner.nextLine();
+                                    
+                                    if (serviceChoice == -1) {
+                                        System.out.println("[CANCELLED] Service request creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    String serviceError = (serviceChoice < 0 || serviceChoice >= services.size()) ? 
+                                        "[ERROR] Invalid service selection! Please try again." : "";
+                                    if (!serviceError.isEmpty()) {
+                                        System.out.println(serviceError);
+                                    }
+                                } while (serviceChoice < 0 || serviceChoice >= services.size());
                                 
-                                String serviceError = (serviceChoice < 0 || serviceChoice >= services.size()) ? 
-                                    "[ERROR] Invalid service selection!" : "";
-                                if (!serviceError.isEmpty()) {
-                                    System.out.println(serviceError);
-                                    continue;
-                                }
+                                if (serviceChoice == -1) continue;
 
-                                // --- STEP 3: SELECT EMPLOYEE ---
-                                System.out.println("\n--- Step 3/4: Select Employee ---");
-                                for (int i = 0; i < employees.size(); i++) {
-                                    Employee employee = employees.get(i);
-                                    System.out.printf("%d. %s (ID: %d, Position: %s, Rate: ₱ %.2f/hr)%n", 
-                                        i + 1, employee.name, employee.id, employee.getPosition(), employee.getHourlyRate());
-                                }
-                                System.out.print("Select Employee (1-" + employees.size() + "): ");
-                                int employeeChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                // --- STEP 3: ENTER HOURS WORKED ---
+                                System.out.println("\n--- Step 3/3: Enter Hours ---");
+                                double hoursWorked;
+                                // Loop until valid hours input (Loops - do-while)
+                                do {
+                                    System.out.print("Hours Worked (greater than 0, or 0 to cancel): ");
+                                    hoursWorked = inputScanner.nextDouble();
+                                    inputScanner.nextLine();
+                                    
+                                    if (hoursWorked == 0) {
+                                        System.out.println("[CANCELLED] Service request creation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (hoursWorked < 0) {
+                                        System.out.println("[ERROR] Hours must be greater than 0! Please try again.");
+                                    }
+                                } while (hoursWorked < 0);
                                 
-                                String employeeError = (employeeChoice < 0 || employeeChoice >= employees.size()) ? 
-                                    "[ERROR] Invalid employee selection!" : "";
-                                if (!employeeError.isEmpty()) {
-                                    System.out.println(employeeError);
-                                    continue;
-                                }
+                                if (hoursWorked == 0) continue;
 
-                                // --- STEP 4: ENTER HOURS WORKED ---
-                                System.out.println("\n--- Step 4/4: Enter Hours ---");
-                                System.out.print("Hours Worked: ");
-                                double hoursWorked = inputScanner.nextDouble();
-                                inputScanner.nextLine();
-
-                                // Create new ServiceRequest object (Object)
+                                // Create new ServiceRequest object without employee (Object)
                                 ServiceRequest newRequest = new ServiceRequest(
                                     serviceRequests.size() + 1,
                                     clients.get(clientChoice),
                                     services.get(serviceChoice),
-                                    employees.get(employeeChoice),
+                                    null, // Employee will be assigned later
                                     hoursWorked
                                 );
                                 // Add to ArrayList (ArrayList methods - add)
@@ -516,12 +736,13 @@ public class MainApp {
                                 // Success confirmation
                                 System.out.println("\n[SUCCESS] Service request created!");
                                 System.out.printf("Request ID: #%d%n", newRequest.getRequestId());
-                                System.out.printf("Total Cost: ₱ %.2f%n", newRequest.calculateTotalCost());
+                                System.out.println("Note: Please assign an employee to this request in option 2.");
                                 break;
 
                             case 2:
+                                // ASSIGN EMPLOYEE TO SERVICE REQUEST
                                 // Validate required data exists
-                                String missingResource = clients.isEmpty() ? "clients" : 
+                                String missingResource = serviceRequests.isEmpty() ? "service requests" : 
                                                         (employees.isEmpty() ? "employees" : "");
                                 if (!missingResource.isEmpty()) {
                                     System.out.println("\n[ERROR] Cannot assign employee!");
@@ -529,49 +750,73 @@ public class MainApp {
                                     continue;
                                 }
 
-                                // --- STEP 1: SELECT CLIENT ---
-                                System.out.println("\n--- Step 1/2: Select Client ---");
-                                for (int i = 0; i < clients.size(); i++) {
-                                    Client client = clients.get(i);
-                                    System.out.printf("%d. %s (ID: %d, Company: %s)%n", 
-                                        i + 1, client.name, client.id, client.getCompanyName());
-                                }
-                                System.out.print("Select Client (1-" + clients.size() + "): ");
-                                int assignClientChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                // --- STEP 1: SELECT SERVICE REQUEST ---
+                                System.out.println("\n--- Step 1/2: Select Service Request ---");
+                                int assignRequestChoice;
+                                // Loop until valid request selection (Loops - do-while)
+                                do {
+                                    for (int i = 0; i < serviceRequests.size(); i++) {
+                                        ServiceRequest request = serviceRequests.get(i);
+                                        String empStatus = (request.getEmployee() == null) ? "No employee assigned" : 
+                                                          "Employee: " + request.getEmployee().name;
+                                        System.out.printf("%d. Request #%d - %s (%s)%n", 
+                                            i + 1, request.getRequestId(), request.getClient().name, empStatus);
+                                    }
+                                    System.out.print("Select Service Request (1-" + serviceRequests.size() + " or 0 to cancel): ");
+                                    assignRequestChoice = inputScanner.nextInt() - 1;
+                                    inputScanner.nextLine();
+                                    
+                                    if (assignRequestChoice == -1) {
+                                        System.out.println("[CANCELLED] Employee assignment cancelled.");
+                                        break;
+                                    }
+                                    
+                                    String assignRequestError = (assignRequestChoice < 0 || assignRequestChoice >= serviceRequests.size()) ? 
+                                        "[ERROR] Invalid service request selection! Please try again." : "";
+                                    if (!assignRequestError.isEmpty()) {
+                                        System.out.println(assignRequestError);
+                                    }
+                                } while (assignRequestChoice < 0 || assignRequestChoice >= serviceRequests.size());
                                 
-                                String assignClientError = (assignClientChoice < 0 || assignClientChoice >= clients.size()) ? 
-                                    "[ERROR] Invalid client selection!" : "";
-                                if (!assignClientError.isEmpty()) {
-                                    System.out.println(assignClientError);
-                                    continue;
-                                }
+                                if (assignRequestChoice == -1) continue;
 
                                 // --- STEP 2: SELECT EMPLOYEE ---
                                 System.out.println("\n--- Step 2/2: Select Employee ---");
-                                for (int i = 0; i < employees.size(); i++) {
-                                    Employee employee = employees.get(i);
-                                    System.out.printf("%d. %s (ID: %d, Position: %s, Rate: ₱ %.2f/hr)%n", 
-                                        i + 1, employee.name, employee.id, employee.getPosition(), employee.getHourlyRate());
-                                }
-                                System.out.print("Select Employee (1-" + employees.size() + "): ");
-                                int assignEmployeeChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                int assignEmployeeChoice;
+                                // Loop until valid employee selection (Loops - do-while)
+                                do {
+                                    for (int i = 0; i < employees.size(); i++) {
+                                        Employee employee = employees.get(i);
+                                        System.out.printf("%d. %s (ID: %d, Position: %s, Rate: PHP %.2f/hr)%n", 
+                                            i + 1, employee.name, employee.id, employee.getPosition(), employee.getHourlyRate());
+                                    }
+                                    System.out.print("Select Employee (1-" + employees.size() + " or 0 to cancel): ");
+                                    assignEmployeeChoice = inputScanner.nextInt() - 1;
+                                    inputScanner.nextLine();
+                                    
+                                    if (assignEmployeeChoice == -1) {
+                                        System.out.println("[CANCELLED] Employee assignment cancelled.");
+                                        break;
+                                    }
+                                    
+                                    String assignEmployeeError = (assignEmployeeChoice < 0 || assignEmployeeChoice >= employees.size()) ? 
+                                        "[ERROR] Invalid employee selection! Please try again." : "";
+                                    if (!assignEmployeeError.isEmpty()) {
+                                        System.out.println(assignEmployeeError);
+                                    }
+                                } while (assignEmployeeChoice < 0 || assignEmployeeChoice >= employees.size());
                                 
-                                String assignEmployeeError = (assignEmployeeChoice < 0 || assignEmployeeChoice >= employees.size()) ? 
-                                    "[ERROR] Invalid employee selection!" : "";
-                                if (!assignEmployeeError.isEmpty()) {
-                                    System.out.println(assignEmployeeError);
-                                    continue;
-                                }
+                                if (assignEmployeeChoice == -1) continue;
 
-                                // Display assignment confirmation
-                                Client selectedClient = clients.get(assignClientChoice);
+                                // Assign employee to the service request
+                                ServiceRequest selectedRequest = serviceRequests.get(assignRequestChoice);
                                 Employee selectedEmployee = employees.get(assignEmployeeChoice);
+                                selectedRequest.setEmployee(selectedEmployee);
+                                
                                 System.out.println("\n[SUCCESS] Employee assigned!");
                                 System.out.printf("Employee: %s%n", selectedEmployee.name);
-                                System.out.printf("Assigned to: %s (%s)%n", 
-                                    selectedClient.name, selectedClient.getCompanyName());
+                                System.out.printf("Assigned to: Request #%d (%s)%n", 
+                                    selectedRequest.getRequestId(), selectedRequest.getClient().name);
                                 break;
 
                             case 3:
@@ -583,79 +828,128 @@ public class MainApp {
                                     continue;
                                 }
 
-                                // Display all service requests for selection
-                                System.out.println("\n--- Select Service Request ---");
-                                for (int i = 0; i < serviceRequests.size(); i++) {
-                                    ServiceRequest request = serviceRequests.get(i);
-                                    System.out.printf("%d. Request #%d - %s (Cost: ₱ %.2f)%n", 
-                                        i + 1, request.getRequestId(), request.getClient().name, 
-                                        request.calculateTotalCost());
-                                }
-                                System.out.print("Choice (1-" + serviceRequests.size() + "): ");
-                                int requestChoice = inputScanner.nextInt() - 1;
-                                inputScanner.nextLine();
+                                // --- STEP 1: SELECT SERVICE REQUEST TO COMPUTE ---
+                                System.out.println("\n--- Select Service Request to Compute ---");
+                                int requestChoice;
+                                // Loop until valid request selection (Loops - do-while)
+                                do {
+                                    for (int i = 0; i < serviceRequests.size(); i++) {
+                                        ServiceRequest request = serviceRequests.get(i);
+                                        String priceStatus = (request.getComputedPrice() == null) ? "Not computed" : 
+                                                            String.format("PHP %.2f", request.getComputedPrice());
+                                        String empStatus = (request.getEmployee() == null) ? "No employee" : 
+                                                          request.getEmployee().name;
+                                        System.out.printf("%d. Request #%d - %s | Employee: %s | Price: %s%n", 
+                                            i + 1, request.getRequestId(), request.getClient().name, 
+                                            empStatus, priceStatus);
+                                    }
+                                    System.out.print("Choice (1-" + serviceRequests.size() + " or 0 to cancel): ");
+                                    requestChoice = inputScanner.nextInt() - 1;
+                                    inputScanner.nextLine();
+                                    
+                                    if (requestChoice == -1) {
+                                        System.out.println("[CANCELLED] Cost computation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    String requestError = (requestChoice < 0 || requestChoice >= serviceRequests.size()) ? 
+                                        "[ERROR] Invalid service request selection! Please try again." : "";
+                                    if (!requestError.isEmpty()) {
+                                        System.out.println(requestError);
+                                    }
+                                } while (requestChoice < 0 || requestChoice >= serviceRequests.size());
                                 
-                                String requestError = (requestChoice < 0 || requestChoice >= serviceRequests.size()) ? 
-                                    "[ERROR] Invalid service request selection!" : "";
-                                if (!requestError.isEmpty()) {
-                                    System.out.println(requestError);
-                                    continue;
-                                }
+                                if (requestChoice == -1) continue;
 
                                 // Get selected service request
                                 ServiceRequest selected = serviceRequests.get(requestChoice);
                                 
-                                // Display cost computation options
+                                // Check if employee is assigned
+                                if (selected.getEmployee() == null) {
+                                    System.out.println("\n[ERROR] Cannot compute cost!");
+                                    System.out.println("Please assign an employee to this request first (Option 2).");
+                                    continue;
+                                }
+                                
+                                // --- STEP 2: DISPLAY COST COMPUTATION OPTIONS ---
                                 System.out.println("\n--- Compute Total Cost ---");
-                                System.out.println("1. Without Discount");
-                                System.out.println("2. With Discount");
-                                System.out.print("Enter your choice: ");
-                                int costChoice = inputScanner.nextInt();
-                                inputScanner.nextLine();
+                                int costChoice;
+                                // Loop until valid cost option selection (Loops - do-while)
+                                do {
+                                    System.out.println("1. Without Discount");
+                                    System.out.println("2. With Discount");
+                                    System.out.println("0. Cancel");
+                                    System.out.print("Enter your choice: ");
+                                    costChoice = inputScanner.nextInt();
+                                    inputScanner.nextLine();
+                                    
+                                    if (costChoice == 0) {
+                                        System.out.println("[CANCELLED] Cost computation cancelled.");
+                                        break;
+                                    }
+                                    
+                                    if (costChoice < 0 || costChoice > 2) {
+                                        System.out.println("[ERROR] Invalid choice! Please select 1, 2, or 0.");
+                                    }
+                                } while (costChoice < 0 || costChoice > 2);
+                                
+                                if (costChoice == 0) continue;
                                 
                                 // If-else if-else control statement (Control statement - if else if)
                                 if (costChoice == 1) {
                                     // --- CALCULATE WITHOUT DISCOUNT ---
+                                    double originalPrice = selected.calculateTotalCost();
+                                    selected.setComputedPrice(originalPrice); // Save the price
+                                    
                                     System.out.println("\n========== Cost Summary ==========");
-                                    System.out.printf("Total Cost (No Discount): ₱ %.2f%n", 
-                                        selected.calculateTotalCost());
+                                    System.out.printf("Total Cost (No Discount): PHP %.2f%n", originalPrice);
                                     System.out.println("==================================");
+                                    System.out.println("[SUCCESS] Price saved to service request!");
                                     
                                 } else if (costChoice == 2) {
                                     // --- CALCULATE WITH DISCOUNT ---
                                     // Get discount percentage from user
-                                    System.out.print("Enter discount percentage (1-100): ");
-                                    double discountPercent = inputScanner.nextDouble();
-                                    inputScanner.nextLine();
+                                    double discountPercent;
+                                    // Loop until valid discount percentage (Loops - do-while)
+                                    do {
+                                        System.out.print("Enter discount percentage (1-100 or 0 to cancel): ");
+                                        discountPercent = inputScanner.nextDouble();
+                                        inputScanner.nextLine();
+                                        
+                                        if (discountPercent == 0) {
+                                            System.out.println("[CANCELLED] Discount calculation cancelled.");
+                                            break;
+                                        }
+                                        
+                                        // Ternary operator with relational operators (Operators - ternary, relational)
+                                        String validationError = (discountPercent < 1 || discountPercent > 100) ? 
+                                            "[ERROR] Invalid percentage! Must be between 1 and 100. Please try again." : "";
+                                        if (!validationError.isEmpty()) {
+                                            System.out.println(validationError);
+                                        }
+                                    } while (discountPercent < 1 || discountPercent > 100);
                                     
-                                    // Ternary operator with relational operators (Operators - ternary, relational)
-                                    String validationError = (discountPercent < 1 || discountPercent > 100) ? 
-                                        "[ERROR] Invalid percentage! Must be between 1 and 100." : "";
-                                    if (!validationError.isEmpty()) {
-                                        System.out.println(validationError);
-                                        continue;
-                                    }
+                                    if (discountPercent == 0) continue;
                                     
                                     // Arithmetic calculations (Operators - arithmetic)
                                     double originalCost = selected.calculateTotalCost();
                                     double discountAmount = (discountPercent / 100) * originalCost;
                                     // Calling overloaded method (Method overloading)
                                     double finalCost = selected.calculateTotalCost(discountAmount);
+                                    selected.setComputedPrice(finalCost); // Save the discounted price
                                     
                                     System.out.println("\n========== Cost Summary ==========");
-                                    System.out.printf("Original Cost:  ₱ %.2f%n", originalCost);
-                                    System.out.printf("Discount:       %.0f%% (₱ %.2f)%n", 
+                                    System.out.printf("Original Cost:  PHP %.2f%n", originalCost);
+                                    System.out.printf("Discount:       %.0f%% (PHP %.2f)%n", 
                                         discountPercent, discountAmount);
-                                    System.out.printf("Final Cost:     ₱ %.2f%n", finalCost);
+                                    System.out.printf("Final Cost:     PHP %.2f%n", finalCost);
                                     System.out.println("==================================");
-                                    
-                                } else {
-                                    System.out.println("[ERROR] Invalid choice!");
+                                    System.out.println("[SUCCESS] Discounted price saved to service request!");
                                 }
                                 break;
 
                             case 0:
-                                System.out.println("Returning to main menu...");
+                                System.out.println("Returning to main menu...\n");
                                 break;
 
                             default:
@@ -706,7 +1000,7 @@ public class MainApp {
                                     totalRevenue += serviceRequest.calculateTotalCost();
                                 }
                                 System.out.println("\n========== Revenue Report =========");
-                                System.out.printf("Total Revenue: ₱ %.2f%n", totalRevenue);
+                                System.out.printf("Total Revenue: PHP %.2f%n", totalRevenue);
                                 System.out.println("===================================");
                                 break;
 
