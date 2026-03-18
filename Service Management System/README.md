@@ -264,7 +264,7 @@ Potential improvements for future versions:
 
 ## 👨‍💻 Author
 
-**Axel**
+**Axel and Clisha**
 
 ## 📝 License
 
